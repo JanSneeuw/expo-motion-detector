@@ -1,6 +1,6 @@
 {
   "name": "expo-motion-detector",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -24,7 +24,8 @@
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
-    "!**/.*"
+    "!**/.*",
+    "expo-plugin"
   ],
   "scripts": {
     "test": "jest",
