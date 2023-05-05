@@ -1,5 +1,5 @@
 # expo-motion-detector
-
+## BEAWARE: This package is still in development and not ready for production use
 Package to detect when a user is performing a certain activity like driving
 
 ## Installation
