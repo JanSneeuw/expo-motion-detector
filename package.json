@@ -1,7 +1,7 @@
 {
   "name": "expo-motion-detector",
-  "version": "0.1.4",
-  "description": "test",
+  "version": "0.1.5",
+  "description": "Module to detect activities such as driving or walking using the Android and iOS native APIs.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
