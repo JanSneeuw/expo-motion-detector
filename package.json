@@ -1,6 +1,6 @@
 {
   "name": "expo-motion-detector",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -41,7 +41,12 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "expo",
+    "motion detection",
+    "activity detection",
+    "activity recognition",
+    "expo managed"
   ],
   "repository": "https://github.com/JanSneeuw/expo-motion-detector",
   "author": "Sven van der Zwet <sven@firstordefautl.nl> (https://firstordefault.nl)",
