@@ -49,6 +49,15 @@ export function stopMockedActivity() {
   return ExpoMotionDetector.stopMockedActivity();
 }
 
+export function requestMotionPermission(): Promise<{ status: string }> {
+  if (Platform.OS === 'android') {
+    return ExpoMotionDetector.requestMotionPermission();
+  } else {
+    console.warn('requestMotionPermission is only available on Android');
+    return Promise.resolve({ status: 'granted' });
+  }
+}
+
 const getActivityTypes = () => {
   if (Platform.OS === 'ios') {
     return {

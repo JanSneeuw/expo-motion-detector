@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -24,6 +25,8 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.modules.core.PermissionAwareActivity;
+import com.facebook.react.modules.core.PermissionListener;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.ActivityRecognitionClient;
 import com.google.android.gms.location.ActivityTransition;
@@ -41,11 +44,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @ReactModule(name = ExpoMotionDetectorModule.NAME)
-public class ExpoMotionDetectorModule extends ReactContextBaseJavaModule {
+public class ExpoMotionDetectorModule extends ReactContextBaseJavaModule implements PermissionListener {
   public static final String NAME = "ExpoMotionDetector";
   private static ReactApplicationContext context;
   private ActivityRecognitionClient activityRecognitionClient;
   private Timer timer;
+  private Promise permissionPromise;
 
 
   public ExpoMotionDetectorModule(ReactApplicationContext reactContext) {
@@ -106,6 +110,18 @@ public class ExpoMotionDetectorModule extends ReactContextBaseJavaModule {
     promise.resolve("Mocked activity stopped");
   }
 
+  @ReactMethod
+  public void requestMotionPermission(final Promise promise) {
+      permissionPromise = promise;
+      PermissionAwareActivity activity = (PermissionAwareActivity) getCurrentActivity();
+      if (activity == null) {
+        promise.reject("ERR_ACTIVITY_DOES_NOT_EXIST", "Activity doesn't exist");
+        return;
+      }
+
+      activity.requestPermissions(new String[]{"android.permission.ACTIVITY_RECOGNITION"}, 1, this);
+  }
+
 
 
   @Override
@@ -136,6 +152,29 @@ public class ExpoMotionDetectorModule extends ReactContextBaseJavaModule {
 
   public static ReactApplicationContext getReactAppContext() {
     return context;
+  }
+
+  @Override
+  public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    if (requestCode == 1 && permissionPromise != null) {
+      boolean allPermissionsGranted = true;
+      for (int result : grantResults) {
+        if (result != PackageManager.PERMISSION_GRANTED) {
+          allPermissionsGranted = false;
+          break;
+        }
+      }
+
+      if (allPermissionsGranted) {
+        permissionPromise.resolve("authorized");
+      } else {
+        permissionPromise.resolve("denied");
+      }
+
+      permissionPromise = null;
+      return true;
+    }
+    return false;
   }
 
   public static class DrivingDetectionService extends Service {
