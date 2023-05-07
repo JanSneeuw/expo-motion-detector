@@ -230,7 +230,9 @@ public class ExpoMotionDetectorModule extends ReactContextBaseJavaModule impleme
       return PendingIntent.getBroadcast(getApplicationContext(), 0, intent, flags);
     }
 
-
+    private int generateId() {
+      return (int) (System.currentTimeMillis() % 10000);
+    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
       List<ActivityTransition> transitions = new ArrayList<>();
@@ -238,7 +240,7 @@ public class ExpoMotionDetectorModule extends ReactContextBaseJavaModule impleme
       activityType = intent.getIntExtra("activityType", DetectedActivity.UNKNOWN);
 
       Notification notification = createNotification();
-      startForeground(1, notification);
+      startForeground(generateId(), notification);
 
       transitions.add(new ActivityTransition.Builder()
         .setActivityType(activityType)
